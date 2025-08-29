@@ -3,8 +3,17 @@ services:
     name: swippe-backend
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
+
+  - type: web
+    name: swippe-frontend
+    plan: free
+    buildCommand: cd frontend && npm install || echo "No package.json found, skipping npm install"
+    staticPublishPath: ./frontend
+    envVars:
+      - key: PUBLIC_URL
+        value: https://swippe-frontend.onrender.com
